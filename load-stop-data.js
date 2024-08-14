@@ -24,8 +24,26 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  // Select all dropdown links
-  const dropdownLinks = document.querySelectorAll(".select_stop-dropdown-link");
+  // Select all dropdown links and convert NodeList to an array for sorting
+  const dropdownLinks = Array.from(
+    document.querySelectorAll(".select_stop-dropdown-link")
+  );
+
+  // Sort the dropdown links based on the data-sort-order attribute
+  dropdownLinks.sort((a, b) => {
+    const aOrder = parseInt(a.getAttribute("data-sort-order"));
+    const bOrder = parseInt(b.getAttribute("data-sort-order"));
+    return aOrder - bOrder;
+  });
+
+  // Get the parent container for the dropdown links
+  const dropdownParent = dropdownLinks[0].parentElement;
+
+  // Clear the existing dropdown links from the DOM
+  dropdownLinks.forEach((link) => link.remove());
+
+  // Reorder the dropdown links in the DOM by appending them back in sorted order
+  dropdownLinks.forEach((link) => dropdownParent.appendChild(link));
 
   // Add click event listeners to all dropdown links
   dropdownLinks.forEach((link) => {
