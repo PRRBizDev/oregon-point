@@ -47,12 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
               let html = '<table class="tablepress">';
 
-              // Add table header, skipping 'Stop details' and 'URL'
+              // Add table header, show only 'Click address for map' header
               html += '<thead><tr>';
-              rows[0].forEach((cell, index) => {
-                  if (index !== 1 && index !== 2 && index !== 3) { // Skip 'Stop details' and 'URL'
-                      html += `<th>${cell ? cell.replace(/^"|"$/g, '') : ''}</th>`;
-                  }
+              html += '<th>Click address for map</th>'; // Only display this header for address links
+              rows[0].slice(3).forEach((cell) => {
+                  html += `<th>${cell ? cell.replace(/^"|"$/g, '') : ''}</th>`;
               });
               html += '</tr></thead>';
 
@@ -60,24 +59,25 @@ document.addEventListener('DOMContentLoaded', function() {
               rows.slice(1).forEach((row, index) => {
                   if (row) {
                       const stopName = row[0] ? row[0].replace(/^"|"$/g, '').trim() : '';
-                      const address = row[2] ? row[2].replace(/^"|"$/g, '').trim() : '';
-                      const url = row[3] ? row[3].replace(/^"|"$/g, '').trim() : '';
+                      const address = row[1] ? row[1].replace(/^"|"$/g, '').trim() : '';
+                      const url = row[2] ? row[2].replace(/^"|"$/g, '').trim() : '';
 
-                      // Check if only the first column has content (e.g., for a restroom break)
+                      // Check if it's a restroom break (if only the first column has content)
                       const isRestroomBreak = stopName && row.slice(1).every(cell => !cell || cell.replace(/^"|"$/g, '').trim() === '');
 
                       html += `<tr class="table_row ${index % 2 === 0 ? 'even' : 'odd'}">`;
 
                       if (isRestroomBreak) {
-                          // If it's a restroom break, stretch the content across all columns
-                          html += `<td class="table_cell" colspan="${rows[0].length - 3}"><strong>${stopName}</strong></td>`;
+                          // Adjust colspan to cover all columns (stop name + route times)
+                          const colspanValue = rows[0].length - 1; // Correct calculation for all columns
+                          html += `<td class="table_cell" colspan="${colspanValue}"><strong>${stopName}</strong></td>`;
                       } else {
                           // Otherwise, render normally
                           html += `<td class="table_cell"><div><strong>${stopName}</strong></div>`;
                           html += `<a href="${url}" target="_blank">${address}</a></td>`;
 
-                          // Render the remaining columns (e.g., times)
-                          row.slice(4).forEach((cell) => {
+                          // Render the remaining columns (route times)
+                          row.slice(3).forEach((cell) => {
                               let content = cell ? cell.replace(/^"|"$/g, '') : '';
                               // Treat content as HTML
                               html += `<td class="table_cell">${content}</td>`;
