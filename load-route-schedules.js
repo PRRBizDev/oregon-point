@@ -123,8 +123,30 @@ document.addEventListener('DOMContentLoaded', function() {
           .catch(error => console.error('Error fetching Google Sheets data:', error));
   }
 
+  // Update main heading based on active tab's direction title
+  function updateScheduleTitle() {
+      const activePane = document.querySelector('.w-tab-pane.w--tab-active');
+      const directionTitle = activePane?.querySelector('.direction-title');
+      const mainHeading = document.getElementById('schedule-title');
+
+      if (directionTitle && mainHeading) {
+          mainHeading.textContent = directionTitle.textContent;
+      }
+  }
+
   // Update tab labels for Cascades route (Southbound/Northbound)
   updateTabLabels();
+
+  // Update the main heading on page load
+  updateScheduleTitle();
+
+  // Update heading when tabs are clicked
+  document.querySelectorAll('.schedule-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+          // Small delay to let Webflow switch the active pane
+          setTimeout(updateScheduleTitle, 50);
+      });
+  });
 
   // Load schedules into their containers
   // Webflow Tabs handles visibility - we just load the data
