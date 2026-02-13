@@ -4,6 +4,34 @@ document.addEventListener('DOMContentLoaded', function() {
       return pathArray[pathArray.length - 1]; // Get the last segment of the URL
   }
 
+  // Route-specific direction labels (only Cascades differs from default Westbound/Eastbound)
+  const routeDirectionLabels = {
+      'cascades': ['Southbound', 'Northbound']
+      // All other routes use Webflow default: Westbound/Eastbound
+  };
+
+  // Update tab labels for Cascades route only
+  function updateTabLabels() {
+      const selectedRoute = getRouteFromPath();
+      const labels = routeDirectionLabels[selectedRoute];
+
+      if (labels) {
+          // Only update if route has custom labels (Cascades)
+          const tabs = document.querySelectorAll('.schedule-tab');
+          tabs.forEach((tab, index) => {
+              if (labels[index]) {
+                  tab.textContent = labels[index];
+              }
+          });
+
+          // Also update the data-direction attributes to match
+          if (tabs.length >= 2) {
+              tabs[0].setAttribute('data-direction', 'southbound');
+              tabs[1].setAttribute('data-direction', 'northbound');
+          }
+      }
+  }
+
   const routeToGidMap = {
       'northwest': {
           'westbound': '936462530',
@@ -95,20 +123,21 @@ document.addEventListener('DOMContentLoaded', function() {
           .catch(error => console.error('Error fetching Google Sheets data:', error));
   }
 
+  // Update tab labels for Cascades route (Southbound/Northbound)
+  updateTabLabels();
+
+  // Load schedules into their containers
+  // Webflow Tabs handles visibility - we just load the data
   if (document.getElementById('westboundSchedule')) {
       loadSchedule('westbound', 'westboundSchedule');
-      document.getElementById('westboundSchedule').style.display = 'block';
   }
   if (document.getElementById('eastboundSchedule')) {
       loadSchedule('eastbound', 'eastboundSchedule');
-      document.getElementById('eastboundSchedule').style.display = 'block';
   }
   if (document.getElementById('southboundSchedule')) {
       loadSchedule('southbound', 'southboundSchedule');
-      document.getElementById('southboundSchedule').style.display = 'block';
   }
   if (document.getElementById('northboundSchedule')) {
       loadSchedule('northbound', 'northboundSchedule');
-      document.getElementById('northboundSchedule').style.display = 'block';
   }
 });
