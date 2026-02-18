@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document
       .querySelectorAll(".parking-list-item")
       .forEach((el) => (el.style.display = "none"));
+    document
+      .querySelectorAll(".stop-address-link")
+      .forEach((el) => (el.style.display = "none"));
   }
 
   // Function to show the selected list
