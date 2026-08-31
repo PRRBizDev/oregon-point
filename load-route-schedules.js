@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function buildScrollWidget(container, tableHtml, label) {
       container.innerHTML =
           '<div class="schedule-widget">' +
-              '<p class="schedule-swipe-hint">Scroll horizontally to view the full schedule <span aria-hidden="true">&rarr;</span></p>' +
+              '<p class="schedule-swipe-hint">Scroll to view the full schedule <span aria-hidden="true">&rarr;</span></p>' +
               '<div class="schedule-scrollbar" aria-hidden="true"><div class="schedule-scrollbar-thumb"></div></div>' +
               '<div class="schedule-scroll-outer">' +
                   '<div class="schedule-scroll" tabindex="0" role="region" aria-label="' + escapeHtml(label) + ', scrolls horizontally">' +
