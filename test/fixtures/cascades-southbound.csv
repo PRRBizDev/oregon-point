@@ -1,0 +1,8 @@
+Stop,Address,Map URL,Trip 1,Trip 2,Trip 3,Trip 4,Trip 5
+Portland - Union Station,"800 NW 6th Ave, Portland, OR 97209",https://www.google.com/maps/place/Union+Station,7:00 AM,9:30 AM,12:00 PM,3:00 PM,6:00 PM
+Tualatin - Park and Ride*,"8305 SW Nyberg St, Tualatin, OR 97062",https://www.google.com/maps/place/Tualatin+Park+and+Ride,7:30 AM,10:00 AM,12:30 PM,3:30 PM,6:30 PM
+Woodburn - Transit Center,"1200 N Pacific Hwy, Woodburn, OR 97071",https://www.google.com/maps/place/Woodburn+Transit,8:00 AM,10:30 AM,1:00 PM,4:00 PM,7:00 PM
+Salem - Amtrak Station,"500 13th St SE, Salem, OR 97301",https://www.google.com/maps/place/Salem+Amtrak,8:30 AM,11:00 AM,1:30 PM,4:30 PM,7:30 PM
+Albany - Amtrak Station,"110 10th Ave SW, Albany, OR 97321",https://www.google.com/maps/place/Albany+Amtrak,9:15 AM,11:45 AM,2:15 PM,5:15 PM,8:15 PM
+Corvallis - Downtown Transit Center,"200 SW 5th St, Corvallis, OR 97333",https://www.google.com/maps/place/Corvallis+Transit,9:40 AM,12:10 PM,2:40 PM,5:40 PM,8:40 PM
+Eugene - Amtrak Station**,"433 Willamette St, Eugene, OR 97401",https://www.google.com/maps/place/Eugene+Amtrak,10:30 AM,1:00 PM,3:30 PM,6:30 PM,9:30 PM
