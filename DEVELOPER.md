@@ -109,13 +109,33 @@ https://docs.google.com/spreadsheets/d/1QJOwBfOfgT6-NmBP5PPDoGZCZm3QnVrcfPAnO0jf
 | Eastern | `192720227` (Westbound) | `994232038` (Eastbound) |
 | Southwest | `1727388931` (Westbound) | `1800641249` (Eastbound) |
 
-**Behavior:**
-1. Reads route from the last URL path segment
-2. Looks for `#westboundSchedule`, `#eastboundSchedule`, `#southboundSchedule`, or `#northboundSchedule` in the DOM
-3. Fetches the corresponding CSV, parses it, and renders an HTML table
-4. Rows where only the first column has content are treated as full-width breaks (e.g., restroom stops)
+**Behavior (v2.4.0):**
+1. Reads route from the last non-empty URL path segment
+2. For each direction defined for that route in `ROUTE_TO_GID`, looks for `#{direction}Schedule` in the DOM. Containers for other routes' directions are ignored.
+3. If a last-known-good copy of the CSV exists in `localStorage` (`pointSchedule:v1:{gid}`), renders it immediately, then fetches in the background and re-renders only if the data changed
+4. Otherwise shows a loading status, fetches with up to 3 attempts (0 / 800 / 2400 ms backoff, 8 s timeout each), parses, validates, renders, and caches
+5. If every attempt fails and there is no cache, shows an error status. If there is a cache, keeps the cached table and reports the failure silently.
+6. Rows where only the first column has content are treated as full-width breaks (e.g., restroom stops)
+
+**Status region:** each container gets a `<p class="schedule-status" role="status" aria-live="polite" data-state="loading|loaded|error">` as its first child and a `.schedule-host` wrapper around the table widget. `aria-busy` is set on the container while a first load is in flight.
 
 **CSV columns:** `[0] Stop Name` | `[1] Address` | `[2] Map URL` | `[3+] Trip times`
+
+**Validation:** a header with fewer than 4 columns, or no stop rows, blocks rendering (error). Empty time cells, values that do not look like times, and non-http(s) map URLs are warnings: the table still renders and the warning is reported. Use `--` in the sheet for "no stop at this trip"; do not leave time cells empty.
+
+**Telemetry:** events are pushed to `window.dataLayer` (GTM), to `window.gtag` if present, and to `window.POINT_SCHEDULE_BEACON_URL` via `sendBeacon` if that global is set. Set `window.POINT_SCHEDULE_DEBUG = true` to log them to the console.
+
+| Event | Key params |
+|---|---|
+| `schedule_loaded` | `route`, `direction`, `source` (`network` or `cache`), `ms`, `replaced_cache` |
+| `schedule_revalidated` | `route`, `direction`, `changed` |
+| `schedule_load_error` | `route`, `direction`, `reason` (`network`, `timeout`, `validation`), `attempts`, `fallback` (`cache` or `none`), `message` |
+| `schedule_validation_warning` | `route`, `direction`, `warning_count`, `first_warning` |
+| `schedule_validation_error` | `route`, `direction`, `error_count`, `first_error` |
+
+Every event also carries `schedule_version` and `page_path`. To see them in GA4, add a GTM Custom Event trigger for `schedule_load_error` (and optionally `schedule_loaded`) that fires a GA4 Event tag forwarding the parameters above.
+
+**Pure functions:** `parseCsv`, `normalizeRows`, `validateRows`, and `renderTableHtml` are exposed as `window.PointSchedules` and as a CommonJS export for tests and tooling.
 
 ### `load-stop-data.js`
 
