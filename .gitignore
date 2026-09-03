@@ -2,3 +2,4 @@
 .playwright-mcp/
 memory/
 *.png
+.DS_Store

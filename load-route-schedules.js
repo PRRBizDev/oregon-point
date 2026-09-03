@@ -316,12 +316,18 @@
     '.schedule-scroll td.restroom-cell{position:static}' +
     '.schedule-scroll .restroom-note{position:sticky;left:8px;display:inline-block}';
 
+  // Version-aware so a stale stylesheet from an older script (for example
+  // during side-by-side testing) is replaced rather than trusted.
   function injectStyles() {
-    if (document.getElementById('schedule-scroll-styles')) return;
-    var style = document.createElement('style');
-    style.id = 'schedule-scroll-styles';
+    var style = document.getElementById('schedule-scroll-styles');
+    if (style && style.getAttribute('data-version') === VERSION) return;
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'schedule-scroll-styles';
+      document.head.appendChild(style);
+    }
+    style.setAttribute('data-version', VERSION);
     style.textContent = SCROLL_UI_CSS;
-    document.head.appendChild(style);
   }
 
   // --- telemetry -----------------------------------------------------
