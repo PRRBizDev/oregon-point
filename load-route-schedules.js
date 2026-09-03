@@ -296,7 +296,7 @@
     '.schedule-status{margin:0 0 8px;font-weight:600}' +
     '.schedule-status[data-state="loaded"],.schedule-status[data-state="idle"]{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}' +
     '.schedule-status[data-state="error"]{color:#8a1c1c}' +
-    '.schedule-swipe-hint{display:none;margin:0 0 8px;font-size:.9rem;font-weight:600;color:' + SCHEDULE_ACCENT + '}' +
+    '.schedule-swipe-hint{display:none;margin:0 0 8px;font-size:0.875rem;font-weight:600;color:' + SCHEDULE_ACCENT + '}' +
     '@media (max-width:900px){.schedule-widget.is-scrollable .schedule-swipe-hint{display:block}}' +
     '.schedule-scrollbar{display:none;position:relative;height:16px;margin:0 0 8px;border-radius:8px;background:#dde5ea;cursor:pointer;touch-action:none}' +
     '.schedule-widget.is-scrollable .schedule-scrollbar{display:block}' +
@@ -477,7 +477,7 @@
 
     host.innerHTML =
       '<div class="schedule-widget">' +
-      '<p class="schedule-swipe-hint">Scroll horizontally to view the full schedule <span aria-hidden="true">&rarr;</span></p>' +
+      '<p class="schedule-swipe-hint"><span aria-hidden="true">↔</span> Scroll horizontally to view the full schedule</p>' +
       '<div class="schedule-scrollbar" aria-hidden="true"><div class="schedule-scrollbar-thumb"></div></div>' +
       '<div class="schedule-scroll-outer">' +
       '<div class="schedule-scroll" tabindex="0" role="region" aria-label="' + escapeHtml(label) + ', scrolls horizontally">' +
