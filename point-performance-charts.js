@@ -1,5 +1,5 @@
 /*!
- * POINT Performance Charts v0.4.0
+ * POINT Performance Charts v0.5.0
  * Accessible, dependency-free line charts for oregon-point.com/performance.
  *
  * Replaces the Looker Studio iframes. Data comes from the "Performance Data"
@@ -25,7 +25,7 @@
 ((global) => {
   'use strict';
 
-  const VERSION = '0.4.0';
+  const VERSION = '0.5.0';
 
   // ------------------------------------------------------------------
   // Configuration
@@ -460,19 +460,16 @@
     return { data, errors: [], warnings };
   }
 
-  /** Trims every series to the latest `months` months (default 24) across all routes and metrics. */
+  /** Trims each series to its own latest `months` months (default 24). Routes that report late keep a full window. */
   function recentMonths(data, months = MONTHS_SHOWN) {
-    let latest = '';
-    for (const metrics of Object.values(data)) {
-      for (const s of Object.values(metrics)) {
-        if (s.length && s[s.length - 1].month > latest) latest = s[s.length - 1].month;
-      }
-    }
-    if (!latest) return data;
-    const start = shiftMonth(latest, -(months - 1));
     const out = {};
     for (const [route, metrics] of Object.entries(data)) {
       for (const [metric, points] of Object.entries(metrics)) {
+        if (!points.length) continue;
+        // Each series ends at its own latest reported month, so every chart
+        // shows up to `months` months of that route's data.
+        const latest = points[points.length - 1].month;
+        const start = shiftMonth(latest, -(months - 1));
         const s = trimNulls(points.filter((p) => p.month >= start && p.month <= latest));
         if (s.length) (out[route] ??= {})[metric] = s;
       }
